@@ -1,11 +1,11 @@
 import random
 
 
-def get_random_word_from_wordlist():
-    wordlist = []
+def get_random_word_from_word_list():
+    word_list = []
     with open("hangman_wordlist.txt", 'r') as file:
-        wordlist = file.read().split('\n')
-    word = random.choice(wordlist)
+        word_list = file.read().split('\n')
+    word = random.choice(word_list)
     return word
 
 
@@ -18,9 +18,9 @@ def get_some_letters(word):
     character = random.choice(letters)
     for num, char in enumerate(list(word)):
         if char == character:
-            templist = list(temp)
-            templist[num] = char
-            temp = ''.join(templist)
+            temp_list = list(temp)
+            temp_list[num] = char
+            temp = ''.join(temp_list)
     return temp
 
 
@@ -77,7 +77,7 @@ def draw_hangman(chances):
 
 
 def start_hangman_game():
-    word = get_random_word_from_wordlist()
+    word = get_random_word_from_word_list()
     temp = get_some_letters(word)
     chances = 7
     found = False
@@ -97,9 +97,9 @@ def start_hangman_game():
         else:
             for num, char in enumerate(list(word)):
                 if char == character:
-                    templist = list(temp)
-                    templist[num] = char
-                    temp = ''.join(templist)
+                    temp_list = list(temp)
+                    temp_list[num] = char
+                    temp = ''.join(temp_list)
                     found = True
         if found:
             found = False
@@ -107,7 +107,7 @@ def start_hangman_game():
             chances -= 1
         if '_' not in temp:
             print(f"\nYou Won! The word was: {word}")
-            print(f"You got it in {7 - chances} guess")
+            print(f"You had {7 - chances} wrong guess")
             break
         else:
             draw_hangman(chances)
