@@ -1,11 +1,11 @@
 import random
 
 
-def get_random_word_from_word_list():
-    word_list = []
-    with open("word_list.txt", 'r') as file:
-        word_list = file.read().split('\n')
-    word = random.choice(word_list)
+def get_random_word_from_wordlist():
+    wordlist = []
+    with open("hangman_wordlist.txt", 'r') as file:
+        wordlist = file.read().split('\n')
+    word = random.choice(wordlist)
     return word
 
 
@@ -18,9 +18,9 @@ def get_some_letters(word):
     character = random.choice(letters)
     for num, char in enumerate(list(word)):
         if char == character:
-            temp_list = list(temp)
-            temp_list[num] = char
-            temp = ''.join(temp_list)
+            templist = list(temp)
+            templist[num] = char
+            temp = ''.join(templist)
     return temp
 
 
@@ -97,9 +97,9 @@ def start_hangman_game():
         else:
             for num, char in enumerate(list(word)):
                 if char == character:
-                    temp_list = list(temp)
-                    temp_list[num] = char
-                    temp = ''.join(temp_list)
+                    templist = list(temp)
+                    templist[num] = char
+                    temp = ''.join(templist)
                     found = True
         if found:
             found = False
