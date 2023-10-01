@@ -1,40 +1,127 @@
 import random
 
-with open('secret_word_list.txt', 'r') as secret_word_list:
-    secret_words = secret_word_list.readlines()[:-1]
+
+def get_random_word_from_word_list():
+    word_list = []
+    with open("word_list.txt", 'r') as file:
+        word_list = file.read().split('\n')
+    word = random.choice(word_list)
+    return word
 
 
-def generate_secret_word(secret_words):
-    return random.choice(secret_words)
+def get_some_letters(word):
+    letters = []
+    temp = '_'*len(word)
+    for char in list(word):
+        if char not in letters:
+            letters.append(char)
+    character = random.choice(letters)
+    for num, char in enumerate(list(word)):
+        if char == character:
+            temp_list = list(temp)
+            temp_list[num] = char
+            temp = ''.join(temp_list)
+    return temp
 
 
-guesses_taken = 0
-guesses_allowed = len(generate_secret_word(secret_words)) + 5
-guesses = []
-done = False
+def draw_hangman(chances):
+    if chances == 6:
+        print("________      ")
+        print("|      |      ")
+        print("|             ")
+        print("|             ")
+        print("|             ")
+        print("|             ")
+    elif chances == 5:
+        print("________      ")
+        print("|      |      ")
+        print("|      0      ")
+        print("|             ")
+        print("|             ")
+        print("|             ")
+    elif chances == 4:
+        print("________      ")
+        print("|      |      ")
+        print("|      0      ")
+        print("|     /       ")
+        print("|             ")
+        print("|             ")
+    elif chances == 3:
+        print("________      ")
+        print("|      |      ")
+        print("|      0      ")
+        print("|     /|      ")
+        print("|             ")
+        print("|             ")
+    elif chances == 2:
+        print("________      ")
+        print("|      |      ")
+        print("|      0      ")
+        print("|     /|\     ")
+        print("|             ")
+        print("|             ")
+    elif chances == 1:
+        print("________      ")
+        print("|      |      ")
+        print("|      0      ")
+        print("|     /|\     ")
+        print("|     /       ")
+        print("|             ")
+    elif chances == 0:
+        print("________      ")
+        print("|      |      ")
+        print("|      0      ")
+        print("|     /|\     ")
+        print("|     / \     ")
+        print("|             ")
 
-while not done:
-    for letter in generate_secret_word(secret_words):
-        if letter.lower() in guesses:
-            print(letter, end=" ")
-        else:
-            print("_", end=" ")
-    print("")
 
-    print(
-        "You have made {guesses_taken} guesses. You have {guesses_allowed} guesses left.")
-    guess = input('What is your next guess? Input letter here: ')
-
-    guesses.append(guess.lower())
-    if guess.lower() not in word.lower():
-        guesses_taken += 1
-        guesses_allowed -= 1
-        if guesses_allowed == 0:
-            print(
-                f"You ran out of guesses! The secret word was {generate_secret_word(secret_words)}")
+def start_hangman_game():
+    word = get_random_word_from_wordlist()
+    temp = get_some_letters(word)
+    chances = 7
+    found = False
+    while True:
+        if chances == 0:
+            print(f"Sorry! You Lost, the word was: {word}")
+            print("Better luck next time")
             break
+        print("=== Guess the word ===")
+        print(temp, end='')
+        print(f"\t(word has {len(word)} letters)")
+        print(f"Chances left: {chances}")
+        character = input("Enter the character you think the word may have: ")
+        if len(character) > 1 or not character.isalpha():
+            print("Please enter a single alphabet only")
+            continue
+        else:
+            for num, char in enumerate(list(word)):
+                if char == character:
+                    temp_list = list(temp)
+                    temp_list[num] = char
+                    temp = ''.join(temp_list)
+                    found = True
+        if found:
+            found = False
+        else:
+            chances -= 1
+        if '_' not in temp:
+            print(f"\nYou Won! The word was: {word}")
+            print(f"You got it in {7 - chances} guess")
+            break
+        else:
+            draw_hangman(chances)
+        print()
 
-done = True
-for letter in generate_secret_word(secret_words):
-    if letter.lower() not in guesses:
-        done = False
+
+print("===== Welcome to the Hangman Game =====")
+while True:
+    choice = input("Do you wanna play hangman? (yes/no): ")
+    if 'yes' in choice.lower():
+        start_hangman_game()
+    elif 'no' in choice.lower():
+        print('Quitting the game...')
+        break
+    else:
+        print("Please enter a valid choice.")
+    print("\n")
